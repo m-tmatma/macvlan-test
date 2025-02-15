@@ -1,3 +1,9 @@
+#--------------------------------------------------------------------------------------------------------
+# sudo firewall-cmd --permanent --add-protocol=ipv6-icmp
+# sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv6" destination address="ff02::1" accept'
+# sudo firewall-cmd --permanent --add-port=12345/udp
+# sudo firewall-cmd --reload
+#--------------------------------------------------------------------------------------------------------
 import socket
 import struct
 import fcntl
