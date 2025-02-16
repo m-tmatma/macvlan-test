@@ -11,6 +11,7 @@ RUN apt-get update && apt-get autoremove --purge -y \
      sudo \
      locales \
      iproute2 \
+     tcpdump \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
