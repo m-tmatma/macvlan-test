@@ -2,6 +2,7 @@
 import socket
 import time
 import sys
+import select
 
 def loop(multicast_index: int):
     MCAST_GROUP = 'ff02::1'
@@ -10,14 +11,30 @@ def loop(multicast_index: int):
     # IPv6 ソケットを作成
     sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
     sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 1)
-
-    # 使用するインターフェースを設定
     sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, multicast_index)
 
+    # 受信用の設定
+    sock.bind(('::', MCAST_PORT))
+
     while True:
+        # コマンドの送信
         message = b"Hello, Multicast World!"
         sock.sendto(message, (MCAST_GROUP, MCAST_PORT))
         print(f'Sent message: {message}')
+
+        # 1秒間応答を待機
+        timeout = time.time() + 1.0
+        while time.time() < timeout:
+            # select を使って待機
+            ready = select.select([sock], [], [], 0.1)
+            if ready[0]:
+                try:
+                    data, addr = sock.recvfrom(4096)
+                    print(f"Received from {addr}: {data.decode()}")
+                except socket.error as e:
+                    print(f"Error receiving data: {e}")
+
+        print("Waiting for next command...")
         time.sleep(1)
 
 if __name__ == '__main__':
