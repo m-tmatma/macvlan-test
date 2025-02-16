@@ -18,6 +18,9 @@ jobs:
     - name: restart docker
       run: sudo systemctl restart docker
 
+    - name: ip addr show
+      run: ip addr show
+
     - name: create network
       run: ./network.sh
 
