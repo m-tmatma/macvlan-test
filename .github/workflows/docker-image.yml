@@ -32,3 +32,6 @@ jobs:
 
     - name: ip addr show
       run: ip addr show
+
+    - name: send multicast
+      run: ./multicast_sender.py macvlan-shim 5
