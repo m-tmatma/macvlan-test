@@ -4,6 +4,12 @@ import time
 import sys
 import select
 
+def get_interface_index(interface_name: str) -> int:
+    try:
+        return socket.if_nametoindex(interface_name)
+    except OSError as e:
+        print(f"Error: Interface '{interface_name}' not found.")
+        return -1
 def loop(multicast_index: int, loop_count: int = 0):
     MCAST_GROUP = 'ff02::1'
     MCAST_PORT = 12345
@@ -49,6 +55,10 @@ if __name__ == '__main__':
         print('Usage: python3 multicast_sender.py <multicast_index> <loop_count>')
         sys.exit(1)
 
-    multicast_index = int(sys.argv[1])
+    try:
+        multicast_index = int(sys.argv[1])
+    except ValueError:
+        multicast_index = get_interface_index(sys.argv[1])
+
     loop_count = int(sys.argv[2]) if len(sys.argv) == 3 else -1
     loop(multicast_index, loop_count)
