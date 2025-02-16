@@ -39,11 +39,11 @@ def main(interface_name: str):
 
     while True:
         data, addr = sock.recvfrom(4096)
-        print(f"Received from {addr}: {data}")
+        print(f"Received from {addr}: {data}", flush=True)
 
         # 受信したデータをそのまま送信元に返信
         sock.sendto(data, addr)
-        print(f"Replied to {addr}")
+        print(f"Replied to {addr}", flush=True)
 
 if __name__ == "__main__":
     interface_name = sys.argv[1]
