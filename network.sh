@@ -15,3 +15,7 @@ docker network create -d macvlan \
   --subnet 2001:db8:100::/64 \
   --gateway 2001:db8:100::1 \
   -o parent=$INTERFACE macvlan
+
+sudo ip link add macvlan-shim link $INTERFACE type macvlan mode bridge
+sudo ip addr add fd00::1/64 dev macvlan-shim
+sudo ip link set macvlan-shim up
