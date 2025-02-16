@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 #--------------------------------------------------------------------------------------------------------
 # sudo firewall-cmd --permanent --add-protocol=ipv6-icmp
 # sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv6" destination address="ff02::1" accept'
