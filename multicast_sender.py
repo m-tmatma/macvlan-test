@@ -22,20 +22,22 @@ def loop(multicast_index: int, loop_count: int = 0):
     # 受信用の設定
     sock.bind(('::', MCAST_PORT))
 
+    send_count = 0
     print(f"loop_count: {loop_count}")
     while True:
+        send_count += 1
         if loop_count >= 0:
             loop_count -= 1
             if loop_count < 0:
                 break
 
         # コマンドの送信
-        message = b"Hello, Multicast World!"
+        message = b"Hello, Multicast World! " + str(send_count).encode()
         sock.sendto(message, (MCAST_GROUP, MCAST_PORT))
         print(f'Sent message: {message}')
 
-        # 1秒間応答を待機
-        timeout = time.time() + 1.0
+        # 0.5秒間応答を待機
+        timeout = time.time() + 0.5
         while time.time() < timeout:
             # select を使って待機
             ready = select.select([sock], [], [], 0.1)
@@ -47,7 +49,6 @@ def loop(multicast_index: int, loop_count: int = 0):
                     print(f"Error receiving data: {e}")
 
         print("Waiting for next command...")
-        time.sleep(1)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2 and len(sys.argv) != 3:
