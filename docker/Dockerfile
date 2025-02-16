@@ -13,3 +13,6 @@ RUN apt-get update && apt-get autoremove --purge -y \
      iproute2 \
  && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /app
+COPY multicast_responder.py .
+CMD ["python3", "multicast_responder.py"]
