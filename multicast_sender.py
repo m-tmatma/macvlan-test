@@ -5,8 +5,11 @@ import sys
 import select
 
 def get_interface_index(interface_name: str) -> int:
-    return socket.if_nametoindex(interface_name)
-
+    try:
+        return socket.if_nametoindex(interface_name)
+    except OSError as e:
+        print(f"Error: Interface '{interface_name}' not found.")
+        return -1
 def loop(multicast_index: int, loop_count: int = 0):
     MCAST_GROUP = 'ff02::1'
     MCAST_PORT = 12345
