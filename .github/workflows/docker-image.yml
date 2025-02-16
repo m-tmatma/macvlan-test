@@ -12,3 +12,17 @@ jobs:
     - name: Build the Docker image
       run: ./build.sh
 
+    - name: copy daemon.json
+      run: sudo cp daemon.json /etc/docker/daemon.json
+
+    - name: restart docker
+      run: sudo systemctl restart docker
+
+    - name: run the Docker image
+      run: |
+        for i in {1..10}; do
+          ./run.sh -d
+        done
+
+    - name: ip addr show
+      run: ip addr show
