@@ -4,7 +4,7 @@ import time
 import sys
 import select
 
-def loop(multicast_index: int):
+def loop(multicast_index: int, loop_count: int = 0):
     MCAST_GROUP = 'ff02::1'
     MCAST_PORT = 12345
 
@@ -16,7 +16,13 @@ def loop(multicast_index: int):
     # 受信用の設定
     sock.bind(('::', MCAST_PORT))
 
+    print(f"loop_count: {loop_count}")
     while True:
+        if loop_count >= 0:
+            loop_count -= 1
+            if loop_count < 0:
+                break
+
         # コマンドの送信
         message = b"Hello, Multicast World!"
         sock.sendto(message, (MCAST_GROUP, MCAST_PORT))
@@ -38,9 +44,11 @@ def loop(multicast_index: int):
         time.sleep(1)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 2 and len(sys.argv) != 3:
         print('Usage: python3 multicast_sender.py <multicast_index>')
+        print('Usage: python3 multicast_sender.py <multicast_index> <loop_count>')
         sys.exit(1)
 
     multicast_index = int(sys.argv[1])
-    loop(multicast_index)
+    loop_count = int(sys.argv[2]) if len(sys.argv) == 3 else -1
+    loop(multicast_index, loop_count)
