@@ -18,6 +18,9 @@ jobs:
     - name: restart docker
       run: sudo systemctl restart docker
 
+    - name: create network
+      run: ./network.sh
+
     - name: run the Docker image
       run: |
         for i in {1..10}; do
