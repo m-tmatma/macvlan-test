@@ -9,6 +9,7 @@
 import socket
 import struct
 import fcntl
+import sys
 
 MULTICAST_GROUP = "ff02::1"  # 全ノードマルチキャストアドレス
 PORT = 12345
@@ -18,7 +19,7 @@ def get_interface_index(interface_name):
     s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
     return socket.if_nametoindex(interface_name)
 
-def main():
+def main(interface_name: str):
     # IPv6 UDP ソケットを作成
     sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -27,7 +28,7 @@ def main():
     sock.bind(("::", PORT))
 
     # インターフェースを明示的に取得
-    interface_index = get_interface_index("enp86s0")  # 使用するインターフェース名を指定（例: eth0）
+    interface_index = get_interface_index(interface_name)  # 使用するインターフェース名を指定（例: eth0）
 
     # IPv6 マルチキャストグループに参加
     group = socket.inet_pton(socket.AF_INET6, MULTICAST_GROUP)
@@ -45,4 +46,5 @@ def main():
         print(f"Replied to {addr}")
 
 if __name__ == "__main__":
-    main()
+    interface_name = sys.argv[1]
+    main(interface_name)

@@ -15,4 +15,5 @@ RUN apt-get update && apt-get autoremove --purge -y \
 
 WORKDIR /app
 COPY multicast_responder.py .
-CMD ["python3", "multicast_responder.py"]
+RUN chmod +x multicast_responder.py
+CMD ["python3", "/app/multicast_responder.py", "eth0"]
